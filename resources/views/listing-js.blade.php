@@ -1,5 +1,5 @@
-import AppListing from '../app-components/Listing/AppListing';
+import AppListing from '@admin/app-components/Listing/AppListing';
 
 Vue.component('{{ $modelJSName }}-listing', {
-    mixins: [AppListing]
+mixins: [AppListing]
 });
