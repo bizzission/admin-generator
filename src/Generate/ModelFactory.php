@@ -43,7 +43,14 @@ class ModelFactory extends FileAppender
             $this->view = 'templates.' . $template . '.factory';
         }
 
-        if ($this->appendIfNotAlreadyAppended(base_path('database/factories/ModelFactory.php'), $this->buildClass())) {
+        $factoryPath = base_path('database/factories/ModelFactory.php');
+        if ($this->hasOption('module-name')) {
+            $factoryPath = $this->getModuleDirPath($this->option('module-name'), 'factory')
+                . DIRECTORY_SEPARATOR
+                . 'ModelFactory.php';
+        }
+
+        if ($this->appendIfNotAlreadyAppended($factoryPath, $this->buildClass())) {
             $this->info('Appending ' . $this->modelBaseName . ' model to ModelFactory finished');
         }
 

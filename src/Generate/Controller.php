@@ -80,7 +80,7 @@ class Controller extends ClassGenerator
                 resource_path('views/admin/layout/sidebar.blade.php'),
                 '|url\(\'admin\/' . $this->resource . '\'\)|',
                 "{{-- Do not delete me :) I'm used for auto-generation menu items --}}",
-                "<li class=\"nav-item\"><a class=\"nav-link\" href=\"{{ url('".$this->getViewNamespace(true)."admin/" . $this->resource . "') }}\"><i class=\"nav-icon " . $icon . "\"></i> {{ trans('" . $this->getViewNamespace() . "admin." . $this->modelLangFormat . ".title') }}</a></li>" . PHP_EOL . "           {{-- Do not delete me :) I'm used for auto-generation menu items --}}"
+                "<li class=\"nav-item\"><a class=\"nav-link\" href=\"{{ url('".$this->getViewNamespace('/')."admin/" . $this->resource . "') }}\"><i class=\"nav-icon " . $icon . "\"></i> {{ trans('" . $this->getViewNamespace() . "admin." . $this->modelLangFormat . ".title') }}</a></li>" . PHP_EOL . "           {{-- Do not delete me :) I'm used for auto-generation menu items --}}"
             )) {
                 $this->info('Updating sidebar');
             }
@@ -102,6 +102,7 @@ class Controller extends ClassGenerator
             'modelDotNotation' => $this->modelDotNotation,
             'modelWithNamespaceFromDefault' => $this->modelWithNamespaceFromDefault,
             'viewNamespace' => $this->getViewNamespace(),
+            'routePrefix' => $this->getViewNamespace('/'),
             'rootNamespace' => $this->rootNamespace(),
             'export' => $this->export,
             'withoutBulk' => $this->withoutBulk,

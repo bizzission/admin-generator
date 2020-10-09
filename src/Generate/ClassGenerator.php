@@ -79,24 +79,6 @@ abstract class ClassGenerator extends Command
         return preg_replace('|^App/|', 'app/', $path);
     }
 
-    // public function getModulePath($moduleName)
-    // {
-    //     $modulesPath = $this->laravel['modules']->config('paths');
-
-    //     return $modulesPath['modules']
-    //         . DIRECTORY_SEPARATOR
-    //         .  $moduleName;
-    // }
-
-    // public function getModuleDirPath($moduleName, $dir)
-    // {
-    //     $modulesPath = $this->laravel['modules']->config('paths');
-
-    //     return $this->getModulePath($moduleName)
-    //         . DIRECTORY_SEPARATOR
-    //         . $modulesPath['generator'][$dir]['path'];
-    // }
-
     /**
      * Get the full namespace for a given class, without the class name.
      *
@@ -108,15 +90,6 @@ abstract class ClassGenerator extends Command
         return trim(implode('\\', array_slice(explode('\\', $name), 0, -1)), '\\');
     }
 
-    // public function getViewNamespace()
-    // {
-    //     if ($this->hasOption('module-name')) {
-    //         $module = Module::findOrFail($this->option('module-name'));
-    //         return $module->getLowerName() . '::';
-    //     }
-
-    //     return '';
-    // }
     /**
      * Get the root namespace for the class.
      *
@@ -223,11 +196,7 @@ abstract class ClassGenerator extends Command
         if (empty($className)) {
             $className = $this->generateClassNameFromTable($this->tableName);
         }
-        if ($this->hasOption('module-name')) {
-            // $module = Module::findOrFail($this->argument('module_name'));
-            // dd($this->laravel['modules']->config('namespace') . '\\' . $module->getStudlyName() . '\\' . $className);
-        }
-        //
+
         $this->classFullName = $this->qualifyClass($className);
         $this->classBaseName = class_basename($this->classFullName);
         $this->classNamespace = Str::replaceLast("\\" . $this->classBaseName, '', $this->classFullName);

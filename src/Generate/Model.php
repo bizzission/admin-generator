@@ -61,7 +61,7 @@ class Model extends ClassGenerator
         return view('brackets/admin-generator::' . $this->view, [
             'modelBaseName' => $this->classBaseName,
             'modelNameSpace' => $this->classNamespace,
-            'routePrefix' => $this->getViewNamespace(true),
+            'routePrefix' => $this->getViewNamespace('/'),
 
             // if table name differs from the snake case plural form of the classname, then we need to specify the table name
             'tableName' => ($this->tableName !== Str::snake(Str::plural($this->classBaseName))) ? $this->tableName : null,

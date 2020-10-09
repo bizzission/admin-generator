@@ -83,7 +83,7 @@ class Routes extends FileAppender
             'resource' => $this->resource,
             'export' => $this->export,
             'withoutBulk' => $this->withoutBulk,
-            'viewNamespace' => $this->getViewNamespace(true),
+            'viewNamespace' => $this->getViewNamespace('/'),
         ])->render();
     }
 

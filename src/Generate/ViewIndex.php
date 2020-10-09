@@ -151,11 +151,11 @@ class ViewIndex extends ViewGenerator
             'modelRouteAndViewName' => $this->modelRouteAndViewName,
             'modelPlural' => $this->modelPlural,
             'modelViewsDirectory' => $this->modelViewsDirectory,
-            'modelJSName' => $this->modelJSName,
+            'modelJSName' => $this->getViewNamespace('-') . $this->modelJSName,
             'modelDotNotation' => $this->modelDotNotation,
             'modelLangFormat' => $this->modelLangFormat,
             'viewNamespace' => $this->getViewNamespace(),
-            'routePrefix' => $this->getViewNamespace(true),
+            'routePrefix' => $this->getViewNamespace('/'),
             'resource' => $this->resource,
             'export' => $this->export,
             'containsPublishedAtColumn' => in_array("published_at", array_column($this->readColumnsFromTable($this->tableName)->toArray(), 'name')),
@@ -192,7 +192,7 @@ class ViewIndex extends ViewGenerator
     {
         return view('brackets/admin-generator::' . $this->viewJs, [
             'modelViewsDirectory' => $this->modelViewsDirectory,
-            'modelJSName' => $this->modelJSName,
+            'modelJSName' => $this->getViewNamespace('-') . $this->modelJSName,
         ])->render();
     }
 

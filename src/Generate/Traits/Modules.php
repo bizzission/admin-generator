@@ -24,11 +24,11 @@ trait Modules
             . $modulesPath['generator'][$dir]['path'];
     }
 
-    public function getViewNamespace($routes = false)
+    public function getViewNamespace($routes = '::')
     {
         if ($this->hasOption('module-name')) {
             $module = Module::findOrFail($this->option('module-name'));
-            return $module->getLowerName() . ($routes ? '/' : '::');
+            return $module->getLowerName() . $routes;
         }
 
         return '';

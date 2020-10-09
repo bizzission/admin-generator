@@ -154,10 +154,10 @@ class {{ $controllerBaseName }} extends Controller
 @endif
 @endif
         if ($request->ajax()) {
-            return ['redirect' => url('admin/{{ $resource }}'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
+            return ['redirect' => url('{{ $routePrefix }}admin/{{ $resource }}'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
         }
 
-        return redirect('admin/{{ $resource }}');
+        return redirect('{{ $routePrefix }}admin/{{ $resource }}');
     }
 
     /**
@@ -246,7 +246,7 @@ class {{ $controllerBaseName }} extends Controller
 @endif
         if ($request->ajax()) {
             return [
-                'redirect' => url('admin/{{ $resource }}'),
+                'redirect' => url('{{ $routePrefix }}admin/{{ $resource }}'),
                 'message' => trans('brackets/admin-ui::admin.operation.succeeded'),
 @if($containsPublishedAtColumn)
                 'object' => ${{ $modelVariableName }}
@@ -254,7 +254,7 @@ class {{ $controllerBaseName }} extends Controller
             ];
         }
 
-        return redirect('admin/{{ $resource }}');
+        return redirect('{{ $routePrefix }}admin/{{ $resource }}');
     }
 
     /**

@@ -279,12 +279,12 @@ class ViewForm extends ViewGenerator
             'modelPlural' => $this->modelPlural,
             'modelViewsDirectory' => $this->modelViewsDirectory,
             'modelDotNotation' => $this->modelDotNotation,
-            'modelJSName' => $this->modelJSName,
+            'modelJSName' => $this->getViewNamespace('-') . $this->modelJSName,
             'modelLangFormat' => $this->modelLangFormat,
             'resource' => $this->resource,
             'isUsedTwoColumnsLayout' => $this->isUsedTwoColumnsLayout(),
             'viewNamespace' => $this->getViewNamespace(),
-            'routePrefix' => $this->getViewNamespace(true),
+            'routePrefix' => $this->getViewNamespace('/'),
 
             'columns' => $this->getVisibleColumns($this->tableName, $this->modelVariableName),
             'hasTranslatable' => $this->readColumnsFromTable($this->tableName)->filter(function ($column) {
@@ -304,7 +304,7 @@ class ViewForm extends ViewGenerator
             'modelPlural' => $this->modelPlural,
             'modelViewsDirectory' => $this->modelViewsDirectory,
             'modelDotNotation' => $this->modelDotNotation,
-            'modelJSName' => $this->modelJSName,
+            'modelJSName' => $this->getViewNamespace('-') . $this->modelJSName,
             'modelLangFormat' => $this->modelLangFormat,
             'resource' => $this->resource,
             'isUsedTwoColumnsLayout' => $this->isUsedTwoColumnsLayout(),
@@ -324,7 +324,7 @@ class ViewForm extends ViewGenerator
     {
         return view('brackets/admin-generator::' . $this->formJs, [
             'modelViewsDirectory' => $this->modelViewsDirectory,
-            'modelJSName' => $this->modelJSName,
+            'modelJSName' => $this->getViewNamespace('-') . $this->modelJSName,
 
             'columns' => $this->getVisibleColumns($this->tableName, $this->modelVariableName),
         ])->render();
