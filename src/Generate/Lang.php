@@ -67,9 +67,9 @@ class Lang extends FileAppender
 
         $langPath = resource_path('lang/' . $locale . '/admin.php');
 
-        if ($this->hasOption('module-name')) {
+        if ($this->hasOption('module-name') && ($moduleName = $this->option('module-name'))) {
 
-            $langPath = $this->getModuleDirPath($this->option('module-name'), 'lang')
+            $langPath = $this->getModuleDirPath($moduleName, 'lang')
                 . DIRECTORY_SEPARATOR
                 . $locale . '/admin.php';
         }

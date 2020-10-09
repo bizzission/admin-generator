@@ -49,9 +49,9 @@ class Permissions extends ClassGenerator
     protected function generateClass($force = false)
     {
         $fileName = 'fill_permissions_for_' . $this->modelRouteAndViewName . '.php';
-        if ($this->hasOption('module-name')) {
+        if ($this->hasOption('module-name') && ($moduleName = $this->option('module-name'))) {
 
-            $path = $this->getModuleDirPath($this->option('module-name'), 'migration')
+            $path = $this->getModuleDirPath($moduleName, 'migration')
                 . DIRECTORY_SEPARATOR
                 . date('Y_m_d_His', time()) . '_' . $fileName;
         } else {

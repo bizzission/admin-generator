@@ -70,11 +70,11 @@ class ViewIndex extends ViewGenerator
             $this->viewJs = 'templates.' . $template . '.listing-js';
         }
 
-        if ($this->hasOption('module-name')) {
-            $viewPath = $this->getModuleDirPath($this->option('module-name'), 'views')
+        if ($this->hasOption('module-name') && ($moduleName = $this->option('module-name'))) {
+            $viewPath = $this->getModuleDirPath($moduleName, 'views')
                 . DIRECTORY_SEPARATOR
                 . 'admin/' . $this->modelViewsDirectory . '/index.blade.php';
-            $jsPath = $this->getModuleDirPath($this->option('module-name'), 'assets')
+            $jsPath = $this->getModuleDirPath($moduleName, 'assets')
                 . DIRECTORY_SEPARATOR
                 . 'js/admin/';
 
@@ -128,7 +128,7 @@ class ViewIndex extends ViewGenerator
             $this->info('Appending ' . $this->modelJSName . '/index.js to ' . $bootstrapJsPath . ' finished');
         };
 
-        if ($this->hasOption('module-name')) {
+        if ($this->hasOption('module-name') && ($moduleName = $this->option('module-name'))) {
             $bootstrapModuleJsPath = $jsPath . "../app.js";
             $this->appendIfNotAlreadyAppended($bootstrapModuleJsPath, "import './admin';" . PHP_EOL);
 

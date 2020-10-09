@@ -24,10 +24,17 @@ trait Modules
             . $modulesPath['generator'][$dir]['path'];
     }
 
+    public function getModuleFacade()
+    {
+        if ($this->hasOption('module-name') && ($moduleName = $this->option('module-name'))) {
+            return Module::findOrFail($moduleName);
+        }
+        return null;
+    }
+
     public function getViewNamespace($routes = '::')
     {
-        if ($this->hasOption('module-name')) {
-            $module = Module::findOrFail($this->option('module-name'));
+        if ($module = $this->getModuleFacade()) {
             return $module->getLowerName() . $routes;
         }
 

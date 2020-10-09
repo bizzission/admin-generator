@@ -62,9 +62,9 @@ class Routes extends FileAppender
 
         $routesPath = base_path('routes/web.php');
 
-        if ($this->hasOption('module-name')) {
+        if ($this->hasOption('module-name') && ($moduleName = $this->option('module-name'))) {
 
-            $routesPath = $this->getModuleDirPath($this->option('module-name'), 'routes')
+            $routesPath = $this->getModuleDirPath($moduleName, 'routes')
                 . DIRECTORY_SEPARATOR
                 . 'web.php';
         }

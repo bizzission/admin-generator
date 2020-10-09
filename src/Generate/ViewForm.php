@@ -80,13 +80,13 @@ class ViewForm extends ViewGenerator
         if (!empty($belongsToMany = $this->option('belongs-to-many'))) {
             $this->setBelongToManyRelation($belongsToMany);
         }
-        if ($this->hasOption('module-name')) {
-            $moduleViewPath = $this->getModuleDirPath($this->option('module-name'), 'views')
+        if ($this->hasOption('module-name') && ($moduleName = $this->option('module-name'))) {
+            $moduleViewPath = $this->getModuleDirPath($moduleName, 'views')
                 . DIRECTORY_SEPARATOR
                 . 'admin/' . $this->modelViewsDirectory;
         }
 
-        if ($this->hasOption('module-name')) {
+        if ($this->hasOption('module-name') && ($moduleName = $this->option('module-name'))) {
             $viewPath = $moduleViewPath
                 . '/components/form-elements.blade.php';
         } else {
@@ -109,7 +109,7 @@ class ViewForm extends ViewGenerator
 
         if (in_array("published_at", array_column($this->getVisibleColumns($this->tableName, $this->modelVariableName)->toArray(), 'name'))) {
 
-            if ($this->hasOption('module-name')) {
+            if ($this->hasOption('module-name') && ($moduleName = $this->option('module-name'))) {
                 $viewPath = $moduleViewPath
                     . '/components/form-elements.blade.php';
             } else {
@@ -133,7 +133,7 @@ class ViewForm extends ViewGenerator
             }
         }
 
-        if ($this->hasOption('module-name')) {
+        if ($this->hasOption('module-name') && ($moduleName = $this->option('module-name'))) {
             $viewPath = $moduleViewPath
                 . '/create.blade.php';
         } else {
@@ -154,7 +154,7 @@ class ViewForm extends ViewGenerator
             $this->info('Generating ' . $viewPath . ' finished');
         }
 
-        if ($this->hasOption('module-name')) {
+        if ($this->hasOption('module-name') && ($moduleName = $this->option('module-name'))) {
             $viewPath = $moduleViewPath
                 . '/edit.blade.php';
         } else {
@@ -175,8 +175,8 @@ class ViewForm extends ViewGenerator
             $this->info('Generating ' . $viewPath . ' finished');
         }
 
-        if ($this->hasOption('module-name')) {
-            $formJsPath = $this->getModuleDirPath($this->option('module-name'), 'assets')
+        if ($this->hasOption('module-name') && ($moduleName = $this->option('module-name'))) {
+            $formJsPath = $this->getModuleDirPath($moduleName, 'assets')
                 . DIRECTORY_SEPARATOR
                 . 'js/admin/'
                 . $this->modelJSName
@@ -199,9 +199,8 @@ class ViewForm extends ViewGenerator
             $this->info('Generating ' . $formJsPath . ' finished');
         }
 
-        if ($this->hasOption('module-name')) {
-
-            $jsPath = $this->getModuleDirPath($this->option('module-name'), 'assets')
+        if ($this->hasOption('module-name') && ($moduleName = $this->option('module-name'))) {
+            $jsPath = $this->getModuleDirPath($moduleName, 'assets')
                 . DIRECTORY_SEPARATOR
                 . 'js/admin/';
 

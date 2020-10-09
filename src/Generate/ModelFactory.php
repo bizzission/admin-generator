@@ -44,8 +44,8 @@ class ModelFactory extends FileAppender
         }
 
         $factoryPath = base_path('database/factories/ModelFactory.php');
-        if ($this->hasOption('module-name')) {
-            $factoryPath = $this->getModuleDirPath($this->option('module-name'), 'factory')
+        if ($this->hasOption('module-name') && ($moduleName = $this->option('module-name'))) {
+            $factoryPath = $this->getModuleDirPath($moduleName, 'factory')
                 . DIRECTORY_SEPARATOR
                 . 'ModelFactory.php';
         }

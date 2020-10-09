@@ -99,8 +99,7 @@ abstract class ClassGenerator extends Command
     {
 
         // check module name
-        if ($this->hasOption('module-name')) {
-            $module = Module::findOrFail($this->option('module-name'));
+        if ($module = $this->getModuleFacade()) {
             return $this->laravel['modules']->config('namespace') . '\\' . $module->getStudlyName() . '\\';
         }
 
@@ -144,7 +143,7 @@ abstract class ClassGenerator extends Command
 
         $path = base_path($this->getPathFromClassName($this->classFullName));
         // check modules
-        if ($this->hasOption('module-name')) {
+        if ($this->hasOption('module-name') && ($moduleName = $this->option('module-name'))) {
 
             $modulesPath = $this->laravel['modules']->config('paths');
             $namespace =
