@@ -2,7 +2,7 @@
 @endphp
 
 
-namespace App\Http\Requests\Admin\{{ $modelWithNamespaceFromDefault }};
+namespace {{ $modelNameSpace }};
 @php
     if($translatable->count() > 0) {
         $translatableColumns = $columns->filter(function($column) use ($translatable) {

@@ -1,8 +1,11 @@
-<?php namespace Brackets\AdminGenerator\Generate;
+<?php
+
+namespace Brackets\AdminGenerator\Generate;
 
 use Symfony\Component\Console\Input\InputOption;
 
-class ImpersonalLoginRequest extends ClassGenerator {
+class ImpersonalLoginRequest extends ClassGenerator
+{
 
     /**
      * The name and signature of the console command.
@@ -27,12 +30,13 @@ class ImpersonalLoginRequest extends ClassGenerator {
     {
         $force = $this->option('force');
 
-        if ($this->generateClass($force)){
-            $this->info('Generating '.$this->classFullName.' finished');
+        if ($this->generateClass($force)) {
+            $this->info('Generating ' . $this->classFullName . ' finished');
         }
     }
 
-    protected function buildClass() {
+    protected function buildClass()
+    {
 
         return view('brackets/admin-generator::templates.admin-user.impersonal-login-request', [
             'modelBaseName' => $this->modelBaseName,
@@ -42,15 +46,18 @@ class ImpersonalLoginRequest extends ClassGenerator {
         ])->render();
     }
 
-    protected function getOptions() {
+    protected function getOptions()
+    {
         return [
             ['model-name', 'm', InputOption::VALUE_OPTIONAL, 'Generates a code for the given model'],
             ['force', 'f', InputOption::VALUE_NONE, 'Force will delete files before regenerating request'],
+            ['module-name', 'b', InputOption::VALUE_OPTIONAL, 'Specify module name'],
         ];
     }
 
-    public function generateClassNameFromTable($tableName) {
-        return 'ImpersonalLogin'.$this->modelBaseName;
+    public function generateClassNameFromTable($tableName)
+    {
+        return 'ImpersonalLogin' . $this->modelBaseName;
     }
 
     /**
@@ -61,7 +68,6 @@ class ImpersonalLoginRequest extends ClassGenerator {
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Http\Requests\Admin\\'.$this->modelWithNamespaceFromDefault;
+        return $rootNamespace . '\Http\Requests\Admin\\' . $this->modelWithNamespaceFromDefault;
     }
-
 }

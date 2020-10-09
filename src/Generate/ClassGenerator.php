@@ -1,19 +1,24 @@
-<?php namespace Brackets\AdminGenerator\Generate;
+<?php
 
-use Brackets\AdminGenerator\Generate\Traits\Helpers;
-use Brackets\AdminGenerator\Generate\Traits\Names;
-use Brackets\AdminGenerator\Generate\Traits\Columns;
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Schema;
-use Symfony\Component\Console\Input\InputArgument;
+namespace Brackets\AdminGenerator\Generate;
+
 use Illuminate\Support\Str;
+use Illuminate\Console\Command;
+use Nwidart\Modules\Facades\Module;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Schema;
+use Brackets\AdminGenerator\Generate\Traits\Names;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Brackets\AdminGenerator\Generate\Traits\Columns;
+use Brackets\AdminGenerator\Generate\Traits\Helpers;
+use Brackets\AdminGenerator\Generate\Traits\Modules;
 use Symfony\Component\Console\Output\OutputInterface;
 
-abstract class ClassGenerator extends Command {
+abstract class ClassGenerator extends Command
+{
 
-    use Helpers, Columns, Names;
+    use Helpers, Columns, Names, Modules;
 
     public $classBaseName;
     public $classFullName;
@@ -43,10 +48,12 @@ abstract class ClassGenerator extends Command {
         $this->files = $files;
     }
 
-    protected function getArguments() {
+    protected function getArguments()
+    {
         return [
             ['table_name', InputArgument::REQUIRED, 'Name of the existing table'],
             ['class_name', InputArgument::OPTIONAL, 'Name of the generated class'],
+            // ['module_name', InputArgument::OPTIONAL, 'Name of the generated class'],
         ];
     }
 
@@ -65,11 +72,30 @@ abstract class ClassGenerator extends Command {
      */
     abstract protected function buildClass();
 
-    public function getPathFromClassName($name) {
-        $path = str_replace('\\', '/', $name).".php";
+    public function getPathFromClassName($name)
+    {
+        $path = str_replace('\\', '/', $name) . ".php";
 
         return preg_replace('|^App/|', 'app/', $path);
     }
+
+    // public function getModulePath($moduleName)
+    // {
+    //     $modulesPath = $this->laravel['modules']->config('paths');
+
+    //     return $modulesPath['modules']
+    //         . DIRECTORY_SEPARATOR
+    //         .  $moduleName;
+    // }
+
+    // public function getModuleDirPath($moduleName, $dir)
+    // {
+    //     $modulesPath = $this->laravel['modules']->config('paths');
+
+    //     return $this->getModulePath($moduleName)
+    //         . DIRECTORY_SEPARATOR
+    //         . $modulesPath['generator'][$dir]['path'];
+    // }
 
     /**
      * Get the full namespace for a given class, without the class name.
@@ -82,6 +108,15 @@ abstract class ClassGenerator extends Command {
         return trim(implode('\\', array_slice(explode('\\', $name), 0, -1)), '\\');
     }
 
+    // public function getViewNamespace()
+    // {
+    //     if ($this->hasOption('module-name')) {
+    //         $module = Module::findOrFail($this->option('module-name'));
+    //         return $module->getLowerName() . '::';
+    //     }
+
+    //     return '';
+    // }
     /**
      * Get the root namespace for the class.
      *
@@ -89,6 +124,13 @@ abstract class ClassGenerator extends Command {
      */
     public function rootNamespace()
     {
+
+        // check module name
+        if ($this->hasOption('module-name')) {
+            $module = Module::findOrFail($this->option('module-name'));
+            return $this->laravel['modules']->config('namespace') . '\\' . $module->getStudlyName() . '\\';
+        }
+
         return $this->laravel->getNamespace();
     }
 
@@ -109,7 +151,7 @@ abstract class ClassGenerator extends Command {
         }
 
         return $this->qualifyClass(
-            $this->getDefaultNamespace(trim($rootNamespace, '\\')).'\\'.$name
+            $this->getDefaultNamespace(trim($rootNamespace, '\\')) . '\\' . $name
         );
     }
 
@@ -124,15 +166,26 @@ abstract class ClassGenerator extends Command {
         return $rootNamespace;
     }
 
-    protected function generateClass($force = false) {
+    protected function generateClass($force = false)
+    {
+
         $path = base_path($this->getPathFromClassName($this->classFullName));
+        // check modules
+        if ($this->hasOption('module-name')) {
+
+            $modulesPath = $this->laravel['modules']->config('paths');
+            $namespace =
+                $this->laravel['modules']->config('namespace');
+            $path = str_replace('/' . $namespace . '/', '/' . basename($modulesPath['modules']) . '/', $path);
+        }
+
 
         if ($this->alreadyExists($path)) {
-            if($force) {
-                $this->warn('File '.$path.' already exists! File will be deleted.');
+            if ($force) {
+                $this->warn('File ' . $path . ' already exists! File will be deleted.');
                 $this->files->delete($path);
             } else {
-                $this->error('File '.$path.' already exists!');
+                $this->error('File ' . $path . ' already exists!');
                 return false;
             }
         }
@@ -165,14 +218,18 @@ abstract class ClassGenerator extends Command {
         return $output;
     }
 
-    protected function initClassNames($className = null) {
+    protected function initClassNames($className = null)
+    {
         if (empty($className)) {
             $className = $this->generateClassNameFromTable($this->tableName);
         }
-
+        if ($this->hasOption('module-name')) {
+            // $module = Module::findOrFail($this->argument('module_name'));
+            // dd($this->laravel['modules']->config('namespace') . '\\' . $module->getStudlyName() . '\\' . $className);
+        }
+        //
         $this->classFullName = $this->qualifyClass($className);
         $this->classBaseName = class_basename($this->classFullName);
-        $this->classNamespace = Str::replaceLast("\\".$this->classBaseName, '', $this->classFullName);
+        $this->classNamespace = Str::replaceLast("\\" . $this->classBaseName, '', $this->classFullName);
     }
-
 }

@@ -1,55 +1,45 @@
 {{'@'}}extends('brackets/admin-ui::admin.layout.default')
 
-{{'@'}}section('title', trans('admin.{{ $modelLangFormat }}.actions.edit', ['name' => ${{ $modelVariableName }}->{{$modelTitle}}]))
+{{'@'}}section('title', trans('{{ $viewNamespace }}admin.{{ $modelLangFormat }}.actions.edit', ['name' => ${{ $modelVariableName }}->{{$modelTitle}}]))
 
 {{'@'}}section('body')
 
-    <div class="container-xl">
-@if(!$isUsedTwoColumnsLayout)
-        <div class="card">
-@endif
+<div class="container-xl">
+    @if(!$isUsedTwoColumnsLayout)
+    <div class="card">
+        @endif
 
-            @if($hasTranslatable)<{{ $modelJSName }}-form
-                :action="'{{'{{'}} ${{ $modelVariableName }}->resource_url }}'"
-                :data="{{'{{'}} ${{ $modelVariableName }}->toJsonAllLocales() }}"
-                :locales="@{{ json_encode($locales) }}"
-                :send-empty-locales="false"
-                v-cloak
-                inline-template>
-            @else<{{ $modelJSName }}-form
-                :action="'{{'{{'}} ${{ $modelVariableName }}->resource_url }}'"
-                :data="{{'{{'}} ${{ $modelVariableName }}->toJson() }}"
-                v-cloak
-                inline-template>
-            @endif
+        @if($hasTranslatable)<{{ $modelJSName }}-form :action="'{{'{{'}} ${{ $modelVariableName }}->resource_url }}'" :data="{{'{{'}} ${{ $modelVariableName }}->toJsonAllLocales() }}" :locales="@{{ json_encode($locales) }}" :send-empty-locales="false" v-cloak inline-template>
+            @else<{{ $modelJSName }}-form :action="'{{'{{'}} ${{ $modelVariableName }}->resource_url }}'" :data="{{'{{'}} ${{ $modelVariableName }}->toJson() }}" v-cloak inline-template>
+                @endif
 
                 <form class="form-horizontal form-edit" method="post" {{'@'}}submit.prevent="onSubmit" :action="action" novalidate>
 
-@if($isUsedTwoColumnsLayout)
+                    @if($isUsedTwoColumnsLayout)
                     <div class="row">
                         <div class="col">
                             <div class="card">
                                 <div class="card-header">
-                                    <i class="fa fa-pencil"></i> {{'{{'}} trans('admin.{{ $modelLangFormat }}.actions.edit', ['name' => ${{ $modelVariableName }}->{{$modelTitle}}]) }}
+                                    <i class="fa fa-pencil"></i> {{'{{'}} trans('{{ $viewNamespace }}admin.{{ $modelLangFormat }}.actions.edit', ['name' => ${{ $modelVariableName }}->{{$modelTitle}}]) }}
                                 </div>
                                 <div class="card-body">
-                                    {{'@'}}include('admin.{{ $modelDotNotation }}.components.form-elements')
+                                    {{'@'}}include('{{ $viewNamespace }}admin.{{ $modelDotNotation }}.components.form-elements')
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-md-12 col-lg-12 col-xl-5 col-xxl-4">
-                            {{'@'}}include('admin.{{ $modelDotNotation }}.components.form-elements-right', ['showHistory' => true])
+                            {{'@'}}include('{{ $viewNamespace }}admin.{{ $modelDotNotation }}.components.form-elements-right', ['showHistory' => true])
                         </div>
                     </div>
                     @else
 
                     <div class="card-header">
-                        <i class="fa fa-pencil"></i> {{'{{'}} trans('admin.{{ $modelLangFormat }}.actions.edit', ['name' => ${{ $modelVariableName }}->{{$modelTitle}}]) }}
+                        <i class="fa fa-pencil"></i> {{'{{'}} trans('{{ $viewNamespace }}admin.{{ $modelLangFormat }}.actions.edit', ['name' => ${{ $modelVariableName }}->{{$modelTitle}}]) }}
                     </div>
 
                     <div class="card-body">
-                        {{'@'}}include('admin.{{ $modelDotNotation }}.components.form-elements')
+                        {{'@'}}include('{{ $viewNamespace }}admin.{{ $modelDotNotation }}.components.form-elements')
                     </div>
                     @endif
 
@@ -62,7 +52,7 @@
                         <i class="fa" :class="submiting ? 'fa-spinner' : 'fa-check'"></i>
                         <span>@{{ trans('brackets/admin-ui::admin.btn.saved') }}</span>
                     </button>
-                     @else
+                    @else
 
                     <div class="card-footer">
                         <button type="submit" class="btn btn-primary" :disabled="submiting">
@@ -74,9 +64,9 @@
 
                 </form>
 
-        </{{ $modelJSName }}-form>
+            </{{ $modelJSName }}-form>
 
-    @if(!$isUsedTwoColumnsLayout)
+            @if(!$isUsedTwoColumnsLayout)
     </div>
     @endif
 

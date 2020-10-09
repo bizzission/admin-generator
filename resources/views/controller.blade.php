@@ -5,16 +5,16 @@
 namespace {{ $controllerNamespace }};
 
 @if($export)
-use App\Exports\{{$exportBaseName}};
+use {{ $rootNamespace }}Exports\{{$exportBaseName}};
 @endif
 use App\Http\Controllers\Controller;
 @if(!$withoutBulk)
-use App\Http\Requests\Admin\{{ $modelWithNamespaceFromDefault }}\BulkDestroy{{ $modelBaseName }};
+use {{ $rootNamespace }}Http\Requests\Admin\{{ $modelWithNamespaceFromDefault }}\BulkDestroy{{ $modelBaseName }};
 @endif
-use App\Http\Requests\Admin\{{ $modelWithNamespaceFromDefault }}\Destroy{{ $modelBaseName }};
-use App\Http\Requests\Admin\{{ $modelWithNamespaceFromDefault }}\Index{{ $modelBaseName }};
-use App\Http\Requests\Admin\{{ $modelWithNamespaceFromDefault }}\Store{{ $modelBaseName }};
-use App\Http\Requests\Admin\{{ $modelWithNamespaceFromDefault }}\Update{{ $modelBaseName }};
+use {{ $rootNamespace }}Http\Requests\Admin\{{ $modelWithNamespaceFromDefault }}\Destroy{{ $modelBaseName }};
+use {{ $rootNamespace }}Http\Requests\Admin\{{ $modelWithNamespaceFromDefault }}\Index{{ $modelBaseName }};
+use {{ $rootNamespace }}Http\Requests\Admin\{{ $modelWithNamespaceFromDefault }}\Store{{ $modelBaseName }};
+use {{ $rootNamespace }}Http\Requests\Admin\{{ $modelWithNamespaceFromDefault }}\Update{{ $modelBaseName }};
 use {{ $modelFullName }};
 use Brackets\AdminListing\Facades\AdminListing;
 @if(!$withoutBulk && $hasSoftDelete)
@@ -96,7 +96,7 @@ class {{ $controllerBaseName }} extends Controller
             return ['data' => $data];
         }
 
-        return view('admin.{{ $modelDotNotation }}.index', ['data' => $data]);
+        return view('{{ $viewNamespace }}admin.{{ $modelDotNotation }}.index', ['data' => $data]);
     }
 
     /**
@@ -110,13 +110,13 @@ class {{ $controllerBaseName }} extends Controller
         $this->authorize('admin.{{ $modelDotNotation }}.create');
 
 @if (count($relations) && count($relations['belongsToMany']))
-        return view('admin.{{ $modelDotNotation }}.create',[
+        return view('{{ $viewNamespace }}admin.{{ $modelDotNotation }}.create',[
 @foreach($relations['belongsToMany'] as $belongsToMany)
             '{{ $belongsToMany['related_table'] }}' => {{ $belongsToMany['related_model_name'] }}::all(),
 @endforeach
         ]);
 @else
-        return view('admin.{{ $modelDotNotation }}.create');
+        return view('{{ $viewNamespace }}admin.{{ $modelDotNotation }}.create');
 @endif
     }
 
@@ -203,7 +203,7 @@ class {{ $controllerBaseName }} extends Controller
 
 @endif
 @endif
-        return view('admin.{{ $modelDotNotation }}.edit', [
+        return view('{{ $viewNamespace }}admin.{{ $modelDotNotation }}.edit', [
             '{{ $modelVariableName }}' => ${{ $modelVariableName }},
 @if (count($relations))
 @if (count($relations['belongsToMany']))

@@ -4,7 +4,8 @@ namespace Brackets\AdminGenerator\Generate;
 
 use Symfony\Component\Console\Input\InputOption;
 
-class BulkDestroyRequest extends ClassGenerator {
+class BulkDestroyRequest extends ClassGenerator
+{
 
     /**
      * The name and signature of the console command.
@@ -29,30 +30,35 @@ class BulkDestroyRequest extends ClassGenerator {
     {
         $force = $this->option('force');
 
-        if ($this->generateClass($force)){
-            $this->info('Generating '.$this->classFullName.' finished');
+        if ($this->generateClass($force)) {
+            $this->info('Generating ' . $this->classFullName . ' finished');
         }
     }
 
-    protected function buildClass() {
+    protected function buildClass()
+    {
 
         return view('brackets/admin-generator::bulk-destroy-request', [
             'modelBaseName' => $this->modelBaseName,
             'modelDotNotation' => $this->modelDotNotation,
             'modelWithNamespaceFromDefault' => $this->modelWithNamespaceFromDefault,
             'modelVariableName' => $this->modelVariableName,
+            'modelNameSpace' => $this->classNamespace,
         ])->render();
     }
 
-    protected function getOptions() {
+    protected function getOptions()
+    {
         return [
             ['model-name', 'm', InputOption::VALUE_OPTIONAL, 'Generates a code for the given model'],
             ['force', 'f', InputOption::VALUE_NONE, 'Force will delete files before regenerating request'],
+            ['module-name', 'b', InputOption::VALUE_OPTIONAL, 'Specify module name'],
         ];
     }
 
-    public function generateClassNameFromTable($tableName) {
-        return 'BulkDestroy'.$this->modelBaseName;
+    public function generateClassNameFromTable($tableName)
+    {
+        return 'BulkDestroy' . $this->modelBaseName;
     }
 
     /**
@@ -63,7 +69,6 @@ class BulkDestroyRequest extends ClassGenerator {
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Http\Requests\Admin\\'.$this->modelWithNamespaceFromDefault;
+        return $rootNamespace . '\Http\Requests\Admin\\' . $this->modelWithNamespaceFromDefault;
     }
-
 }

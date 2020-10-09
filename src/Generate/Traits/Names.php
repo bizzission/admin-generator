@@ -1,4 +1,6 @@
-<?php namespace Brackets\AdminGenerator\Generate\Traits;
+<?php
+
+namespace Brackets\AdminGenerator\Generate\Traits;
 
 use Brackets\AdminGenerator\Generate\Controller;
 use Brackets\AdminGenerator\Generate\Model;
@@ -45,6 +47,12 @@ trait Names
         if (is_null($modelName)) {
             $modelName = $modelGenerator->generateClassNameFromTable($this->tableName);
         }
+
+        // pass inout if null
+        if (!$modelGenerator->input) {
+            $modelGenerator->input = $this->input;
+        }
+
         $this->modelFullName = $modelGenerator->qualifyClass($modelName);
 
         $this->modelBaseName = class_basename($modelName);
@@ -52,16 +60,20 @@ trait Names
         $this->modelVariableName = lcfirst(Str::singular(class_basename($this->modelBaseName)));
         $this->modelRouteAndViewName = Str::lower(Str::kebab($this->modelBaseName));
         $this->modelNamespace = Str::replaceLast("\\" . $this->modelBaseName, '', $this->modelFullName);
-        if (!Str::startsWith($this->modelFullName,
-            $startsWith = trim($modelGenerator->rootNamespace(), '\\') . '\Models\\')) {
+        if (!Str::startsWith(
+            $this->modelFullName,
+            $startsWith = trim($modelGenerator->rootNamespace(), '\\') . '\Models\\'
+        )) {
             $this->modelWithNamespaceFromDefault = $this->modelBaseName;
         } else {
             $this->modelWithNamespaceFromDefault = Str::replaceFirst($startsWith, '', $this->modelFullName);
         }
-        $this->modelViewsDirectory = Str::lower(Str::kebab(implode('/',
+        $this->modelViewsDirectory = Str::lower(Str::kebab(implode(
+            '/',
             collect(explode('\\', $this->modelWithNamespaceFromDefault))->map(function ($part) {
                 return lcfirst($part);
-            })->toArray())));
+            })->toArray()
+        )));
 
         $parts = collect(explode('\\', $this->modelWithNamespaceFromDefault));
         $parts->pop();
@@ -83,9 +95,15 @@ trait Names
             $controllerName = $controllerGenerator->generateClassNameFromTable($this->tableName);
         }
 
+        // pass inout if null
+        if (!$controllerGenerator->input) {
+            $controllerGenerator->input = $this->input;
+        }
         $controllerFullName = $controllerGenerator->qualifyClass($controllerName);
-        if (!Str::startsWith($controllerFullName,
-            $startsWith = trim($controllerGenerator->rootNamespace(), '\\') . '\Http\\Controllers\\Admin\\')) {
+        if (!Str::startsWith(
+            $controllerFullName,
+            $startsWith = trim($controllerGenerator->rootNamespace(), '\\') . '\Http\\Controllers\\Admin\\'
+        )) {
             $this->controllerWithNamespaceFromDefault = $controllerFullName;
         } else {
             $this->controllerWithNamespaceFromDefault = Str::replaceFirst($startsWith, '', $controllerFullName);
@@ -108,5 +126,4 @@ trait Names
 
         return Str::ucfirst(str_replace('_', ' ', $string));
     }
-
 }

@@ -1,4 +1,6 @@
-<?php namespace Brackets\AdminGenerator;
+<?php
+
+namespace Brackets\AdminGenerator;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -6,7 +8,8 @@ use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
-class GenerateAdmin extends Command {
+class GenerateAdmin extends Command
+{
 
     /**
      * The name and signature of the console command.
@@ -34,10 +37,12 @@ class GenerateAdmin extends Command {
      *
      * @return mixed
      */
-    public function handle(Filesystem $files) {
+    public function handle(Filesystem $files)
+    {
         $this->files = $files;
 
         $tableNameArgument = $this->argument('table_name');
+        $moduleNameOption = $this->option('module-name');
         $modelOption = $this->option('model-name');
         $controllerOption = $this->option('controller-name');
         $exportOption = $this->option('with-export');
@@ -47,12 +52,14 @@ class GenerateAdmin extends Command {
         $this->call('admin:generate:model', [
             'table_name' => $tableNameArgument,
             'class_name' => $modelOption,
+            '--module-name' => $moduleNameOption,
             '--force' => $force,
         ]);
 
         $this->call('admin:generate:factory', [
             'table_name' => $tableNameArgument,
             '--model-name' => $modelOption,
+            '--module-name' => $moduleNameOption,
             '--seed' => $this->option('seed'),
         ]);
 
@@ -63,37 +70,43 @@ class GenerateAdmin extends Command {
             '--force' => $force,
             '--with-export' => $exportOption,
             '--without-bulk' => $withoutBulkOptions,
+            '--module-name' => $moduleNameOption,
         ]);
 
         $this->call('admin:generate:request:index', [
             'table_name' => $tableNameArgument,
             '--model-name' => $modelOption,
             '--force' => $force,
+            '--module-name' => $moduleNameOption,
         ]);
 
         $this->call('admin:generate:request:store', [
             'table_name' => $tableNameArgument,
             '--model-name' => $modelOption,
             '--force' => $force,
+            '--module-name' => $moduleNameOption,
         ]);
 
         $this->call('admin:generate:request:update', [
             'table_name' => $tableNameArgument,
             '--model-name' => $modelOption,
             '--force' => $force,
+            '--module-name' => $moduleNameOption,
         ]);
 
         $this->call('admin:generate:request:destroy', [
             'table_name' => $tableNameArgument,
             '--model-name' => $modelOption,
             '--force' => $force,
+            '--module-name' => $moduleNameOption,
         ]);
 
-        if(!$withoutBulkOptions) {
+        if (!$withoutBulkOptions) {
             $this->call('admin:generate:request:bulk-destroy', [
                 'table_name' => $tableNameArgument,
                 '--model-name' => $modelOption,
                 '--force' => $force,
+                '--module-name' => $moduleNameOption,
             ]);
         }
 
@@ -103,6 +116,7 @@ class GenerateAdmin extends Command {
             '--controller-name' => $controllerOption,
             '--with-export' => $exportOption,
             '--without-bulk' => $withoutBulkOptions,
+            '--module-name' => $moduleNameOption,
         ]);
 
         $this->call('admin:generate:index', [
@@ -111,24 +125,28 @@ class GenerateAdmin extends Command {
             '--force' => $force,
             '--with-export' => $exportOption,
             '--without-bulk' => $withoutBulkOptions,
+            '--module-name' => $moduleNameOption,
         ]);
 
         $this->call('admin:generate:form', [
             'table_name' => $tableNameArgument,
             '--model-name' => $modelOption,
             '--force' => $force,
+            '--module-name' => $moduleNameOption,
         ]);
 
         $this->call('admin:generate:lang', [
             'table_name' => $tableNameArgument,
             '--model-name' => $modelOption,
             '--with-export' => $exportOption,
+            '--module-name' => $moduleNameOption,
         ]);
 
-        if($exportOption){
+        if ($exportOption) {
             $this->call('admin:generate:export', [
                 'table_name' => $tableNameArgument,
                 '--force' => $force,
+                '--module-name' => $moduleNameOption,
             ]);
         }
 
@@ -138,24 +156,26 @@ class GenerateAdmin extends Command {
                 '--model-name' => $modelOption,
                 '--force' => $force,
                 '--without-bulk' => $withoutBulkOptions,
+                '--module-name' => $moduleNameOption,
             ]);
 
             if ($this->option('no-interaction') || $this->confirm('Do you want to attach generated permissions to the default role now?', true)) {
-               $this->call('migrate');
+                $this->call('migrate');
             }
         }
 
         $this->info('Generating whole admin finished');
-
     }
 
-    protected function getArguments() {
+    protected function getArguments()
+    {
         return [
             ['table_name', InputArgument::REQUIRED, 'Name of the existing table'],
         ];
     }
 
-    protected function getOptions() {
+    protected function getOptions()
+    {
         return [
             ['model-name', 'm', InputOption::VALUE_OPTIONAL, 'Specify custom model name'],
             ['controller-name', 'c', InputOption::VALUE_OPTIONAL, 'Specify custom controller name'],
@@ -163,17 +183,18 @@ class GenerateAdmin extends Command {
             ['force', 'f', InputOption::VALUE_NONE, 'Force will delete files before regenerating admin'],
             ['with-export', 'e', InputOption::VALUE_NONE, 'Generate an option to Export as Excel'],
             ['without-bulk', 'wb', InputOption::VALUE_NONE, 'Generate without bulk options'],
+            ['module-name', 'b', InputOption::VALUE_OPTIONAL, 'Generate within module'],
         ];
     }
 
-    protected function shouldGeneratePermissionsMigration() {
+    protected function shouldGeneratePermissionsMigration()
+    {
         if (class_exists('\Brackets\Craftable\CraftableServiceProvider')) {
             return true;
         }
 
         return false;
     }
-
 }
 
 

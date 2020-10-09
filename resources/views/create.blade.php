@@ -1,23 +1,16 @@
 {{'@'}}extends('brackets/admin-ui::admin.layout.default')
 
-{{'@'}}section('title', trans('admin.{{ $modelLangFormat }}.actions.create'))
+{{'@'}}section('title', trans('{{ $viewNamespace }}admin.{{ $modelLangFormat }}.actions.create'))
 
 {{'@'}}section('body')
 
-    <div class="container-xl">
+<div class="container-xl">
 
-        @if(!$isUsedTwoColumnsLayout)
-        <div class="card">
+    @if(!$isUsedTwoColumnsLayout)
+    <div class="card">
         @endif
 
-        <{{ $modelJSName }}-form
-            :action="'{{'{{'}} url('admin/{{ $resource }}') }}'"
-@if($hasTranslatable)
-            :locales="@{{ json_encode($locales) }}"
-            :send-empty-locales="false"
-@endif
-            v-cloak
-            inline-template>
+        <{{ $modelJSName }}-form :action="'{{'{{'}} url('{{ $routePrefix }}admin/{{ $resource }}') }}'" @if($hasTranslatable) :locales="@{{ json_encode($locales) }}" :send-empty-locales="false" @endif v-cloak inline-template>
 
             <form class="form-horizontal form-create" method="post" {{'@'}}submit.prevent="onSubmit" :action="action" novalidate>
                 @if($isUsedTwoColumnsLayout)
@@ -26,26 +19,26 @@
                     <div class="col">
                         <div class="card">
                             <div class="card-header">
-                                <i class="fa fa-plus"></i> {{'{{'}} trans('admin.{{ $modelLangFormat }}.actions.create') }}
+                                <i class="fa fa-plus"></i> {{'{{'}} trans('{{ $viewNamespace }}admin.{{ $modelLangFormat }}.actions.create') }}
                             </div>
                             <div class="card-body">
-                                {{'@'}}include('admin.{{ $modelDotNotation }}.components.form-elements')
+                                {{'@'}}include('{{ $viewNamespace }}admin.{{ $modelDotNotation }}.components.form-elements')
                             </div>
                         </div>
                     </div>
 
                     <div class="col-md-12 col-lg-12 col-xl-5 col-xxl-4">
-                        {{'@'}}include('admin.{{ $modelDotNotation }}.components.form-elements-right')
+                        {{'@'}}include('{{ $viewNamespace }}admin.{{ $modelDotNotation }}.components.form-elements-right')
                     </div>
                 </div>
                 @else
 
                 <div class="card-header">
-                    <i class="fa fa-plus"></i> {{'{{'}} trans('admin.{{ $modelLangFormat }}.actions.create') }}
+                    <i class="fa fa-plus"></i> {{'{{'}} trans('{{ $viewNamespace }}admin.{{ $modelLangFormat }}.actions.create') }}
                 </div>
 
                 <div class="card-body">
-                    {{'@'}}include('admin.{{ $modelDotNotation }}.components.form-elements')
+                    {{'@'}}include('{{ $viewNamespace }}admin.{{ $modelDotNotation }}.components.form-elements')
                 </div>
                 @endif
                 @if($isUsedTwoColumnsLayout)
@@ -72,11 +65,11 @@
 
         </{{ $modelJSName }}-form>
 
-        </div>
-
-    @if(!$isUsedTwoColumnsLayout)
     </div>
 
-    @endif
+    @if(!$isUsedTwoColumnsLayout)
+</div>
+
+@endif
 
 {{'@'}}endsection

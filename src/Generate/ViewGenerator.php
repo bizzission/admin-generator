@@ -1,19 +1,23 @@
-<?php namespace Brackets\AdminGenerator\Generate;
+<?php
 
-use Brackets\AdminGenerator\Generate\Traits\Helpers;
-use Brackets\AdminGenerator\Generate\Traits\Names;
-use Brackets\AdminGenerator\Generate\Traits\Columns;
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Schema;
-use Symfony\Component\Console\Input\InputArgument;
+namespace Brackets\AdminGenerator\Generate;
+
 use Illuminate\Support\Str;
+use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Schema;
+use Brackets\AdminGenerator\Generate\Traits\Names;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Brackets\AdminGenerator\Generate\Traits\Columns;
+use Brackets\AdminGenerator\Generate\Traits\Helpers;
+use Brackets\AdminGenerator\Generate\Traits\Modules;
 use Symfony\Component\Console\Output\OutputInterface;
 
-abstract class ViewGenerator extends Command {
+abstract class ViewGenerator extends Command
+{
 
-    use Helpers, Columns, Names;
+    use Helpers, Columns, Names, Modules;
 
     /**
      * @var Filesystem
@@ -39,7 +43,8 @@ abstract class ViewGenerator extends Command {
         $this->files = $files;
     }
 
-    protected function getArguments() {
+    protected function getArguments()
+    {
         return [
             ['table_name', InputArgument::REQUIRED, 'Name of the existing table'],
             // FIXME add OPTIONAL file_name argument
@@ -66,7 +71,6 @@ abstract class ViewGenerator extends Command {
         }
 
         return true;
-
     }
 
     /**
@@ -84,5 +88,4 @@ abstract class ViewGenerator extends Command {
 
         return $output;
     }
-
 }

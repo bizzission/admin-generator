@@ -1,9 +1,12 @@
-<?php namespace Brackets\AdminGenerator\Generate;
+<?php
+
+namespace Brackets\AdminGenerator\Generate;
 
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputOption;
 
-class Routes extends FileAppender {
+class Routes extends FileAppender
+{
 
     /**
      * The name and signature of the console command.
@@ -42,46 +45,57 @@ class Routes extends FileAppender {
 
     public function handle()
     {
-        if($this->option('with-export')){
+        if ($this->option('with-export')) {
             $this->export = true;
         }
 
-        if($this->option('without-bulk')){
+        if ($this->option('without-bulk')) {
             $this->withoutBulk = true;
         }
 
         //TODO check if exists
         //TODO make global for all generator
         //TODO also with prefix
-        if(!empty($template = $this->option('template'))) {
-            $this->view = 'templates.'.$template.'.routes';
+        if (!empty($template = $this->option('template'))) {
+            $this->view = 'templates.' . $template . '.routes';
         }
 
-        if ($this->appendIfNotAlreadyAppended(base_path('routes/web.php'), PHP_EOL.PHP_EOL.$this->buildClass())){
+        $routesPath = base_path('routes/web.php');
+
+        if ($this->hasOption('module-name')) {
+
+            $routesPath = $this->getModuleDirPath($this->option('module-name'), 'routes')
+                . DIRECTORY_SEPARATOR
+                . 'web.php';
+        }
+        if ($this->appendIfNotAlreadyAppended($routesPath, PHP_EOL . PHP_EOL . $this->buildClass())) {
             $this->info('Appending routes finished');
         }
     }
 
-    protected function buildClass() {
+    protected function buildClass()
+    {
 
-        return view('brackets/admin-generator::'.$this->view, [
+        return view('brackets/admin-generator::' . $this->view, [
             'controllerPartiallyFullName' => $this->controllerWithNamespaceFromDefault,
             'modelVariableName' => $this->modelVariableName,
             'modelViewsDirectory' => $this->modelViewsDirectory,
             'resource' => $this->resource,
             'export' => $this->export,
             'withoutBulk' => $this->withoutBulk,
+            'viewNamespace' => $this->getViewNamespace(true),
         ])->render();
     }
 
-    protected function getOptions() {
+    protected function getOptions()
+    {
         return [
             ['model-name', 'm', InputOption::VALUE_OPTIONAL, 'Generates a controller for the given model'],
             ['controller-name', 'c', InputOption::VALUE_OPTIONAL, 'Specify custom controller name'],
             ['template', 't', InputOption::VALUE_OPTIONAL, 'Specify custom template'],
             ['with-export', 'e', InputOption::VALUE_NONE, 'Generate an option to Export as Excel'],
             ['without-bulk', 'wb', InputOption::VALUE_NONE, 'Generate without bulk options'],
+            ['module-name', 'b', InputOption::VALUE_OPTIONAL, 'Specify module name'],
         ];
     }
-
 }

@@ -1,17 +1,21 @@
-<?php namespace Brackets\AdminGenerator\Generate;
+<?php
 
-use Brackets\AdminGenerator\Generate\Traits\Helpers;
-use Brackets\AdminGenerator\Generate\Traits\Names;
-use Brackets\AdminGenerator\Generate\Traits\Columns;
+namespace Brackets\AdminGenerator\Generate;
+
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Illuminate\Filesystem\Filesystem;
+use Brackets\AdminGenerator\Generate\Traits\Names;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Brackets\AdminGenerator\Generate\Traits\Columns;
+use Brackets\AdminGenerator\Generate\Traits\Helpers;
+use Brackets\AdminGenerator\Generate\Traits\Modules;
 use Symfony\Component\Console\Output\OutputInterface;
 
-abstract class FileAppender extends Command {
+abstract class FileAppender extends Command
+{
 
-    use Helpers, Columns, Names;
+    use Helpers, Columns, Names, Modules;
 
     /**
      * @var Filesystem
@@ -37,11 +41,30 @@ abstract class FileAppender extends Command {
         $this->files = $files;
     }
 
-    protected function getArguments() {
+    protected function getArguments()
+    {
         return [
             ['table_name', InputArgument::REQUIRED, 'Name of the existing table'],
         ];
     }
+
+    // public function getModulePath($moduleName)
+    // {
+    //     $modulesPath = $this->laravel['modules']->config('paths');
+
+    //     return $modulesPath['modules']
+    //         . DIRECTORY_SEPARATOR
+    //         .  $moduleName;
+    // }
+
+    // public function getModuleDirPath($moduleName, $dir)
+    // {
+    //     $modulesPath = $this->laravel['modules']->config('paths');
+
+    //     return $this->getModulePath($moduleName)
+    //         . DIRECTORY_SEPARATOR
+    //         . $modulesPath['generator'][$dir]['path'];
+    // }
 
     /**
      * Append content to file only if if the content is not present in the file
@@ -51,11 +74,11 @@ abstract class FileAppender extends Command {
      * @param string $defaultContent content that will be used to populated with newly created file (in case it does not already exists)
      * @return bool
      */
-    protected function appendIfNotAlreadyAppended($path, $content, $defaultContent = "<?php".PHP_EOL.PHP_EOL)
+    protected function appendIfNotAlreadyAppended($path, $content, $defaultContent = "<?php" . PHP_EOL . PHP_EOL)
     {
         if (!$this->files->exists($path)) {
             $this->makeDirectory($path);
-            $this->files->put($path, $defaultContent.$content);
+            $this->files->put($path, $defaultContent . $content);
         } else if (!$this->alreadyAppended($path, $content)) {
             $this->files->append($path, $content);
         } else {
@@ -74,7 +97,7 @@ abstract class FileAppender extends Command {
      * @param string $defaultContent content that will be used to populated with newly created file (in case it does not already exists)
      * @return bool
      */
-    protected function replaceIfNotPresent($path, $search, $replace, $defaultContent = "<?php".PHP_EOL.PHP_EOL)
+    protected function replaceIfNotPresent($path, $search, $replace, $defaultContent = "<?php" . PHP_EOL . PHP_EOL)
     {
         if (!$this->files->exists($path)) {
             $this->makeDirectory($path);
