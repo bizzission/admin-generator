@@ -76,13 +76,45 @@ class Controller extends ClassGenerator
             $this->info('Generating ' . $this->classFullName . ' finished');
 
             $icon = Arr::random(['icon-graduation', 'icon-puzzle', 'icon-compass', 'icon-drop', 'icon-globe', 'icon-ghost', 'icon-book-open', 'icon-flag', 'icon-star', 'icon-umbrella', 'icon-energy', 'icon-plane', 'icon-magnet', 'icon-diamond']);
+
+            $find = "{{-- Do not delete me :) I'm used for auto-generation menu items --}}";
+            $ifExistsRegex = '|url\(\'admin\/' . $this->resource . '\'\)|';
+            $sidebarPath = resource_path('views/admin/layout/sidebar.blade.php');
+            $replaceWith = "<li class=\"nav-item\"><a class=\"nav-link\" href=\"{{ url('"
+                . $this->getViewNamespace('/') . "admin/" . $this->resource
+                . "') }}\"><i class=\"nav-icon " . $icon . "\"></i> {{ trans('"
+                . $this->getViewNamespace() . "admin." . $this->modelLangFormat
+                . ".title') }}</a></li>";
+
+            if ($this->hasOption('module-name') && ($moduleName = $this->option('module-name'))) {
+                $sidebarPath =  $this->getModuleDirPath($moduleName, 'views')
+                    . DIRECTORY_SEPARATOR
+                    . 'admin/layout/sidebar.blade.php';
+                if (!$this->alreadyExists($sidebarPath)) {
+                    $this->files->put($sidebarPath, PHP_EOL . "            " . $find);
+                }
+            }
+
             if ($this->strReplaceInFile(
-                resource_path('views/admin/layout/sidebar.blade.php'),
-                '|url\(\'admin\/' . $this->resource . '\'\)|',
-                "{{-- Do not delete me :) I'm used for auto-generation menu items --}}",
-                "<li class=\"nav-item\"><a class=\"nav-link\" href=\"{{ url('".$this->getViewNamespace('/')."admin/" . $this->resource . "') }}\"><i class=\"nav-icon " . $icon . "\"></i> {{ trans('" . $this->getViewNamespace() . "admin." . $this->modelLangFormat . ".title') }}</a></li>" . PHP_EOL . "           {{-- Do not delete me :) I'm used for auto-generation menu items --}}"
+                $sidebarPath,
+                $ifExistsRegex,
+                $find,
+                $replaceWith . PHP_EOL . "            " . $find
             )) {
                 $this->info('Updating sidebar');
+            }
+
+            if ($this->hasOption('module-name') && ($moduleName = $this->option('module-name'))) {
+                $replaceWith = '@include(\'' . $this->getViewNamespace('::') . 'admin.layout.sidebar\')';
+                $ifExistsRegex = '|@include\(\'' . $this->getViewNamespace('::') . 'admin.layout.sidebar\'\)|';
+                if ($this->strReplaceInFile(
+                    resource_path('views/admin/layout/sidebar.blade.php'),
+                    $ifExistsRegex,
+                    $find,
+                    $replaceWith . PHP_EOL . "            " . $find
+                )) {
+                    $this->info('Updating sidebar');
+                }
             }
         }
     }
