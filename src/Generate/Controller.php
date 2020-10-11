@@ -91,7 +91,8 @@ class Controller extends ClassGenerator
                     . DIRECTORY_SEPARATOR
                     . 'admin/layout/sidebar.blade.php';
                 if (!$this->alreadyExists($sidebarPath)) {
-                    $this->files->put($sidebarPath, PHP_EOL . "            " . $find);
+                    $this->makeDirectory($sidebarPath);
+                    $this->files->put($sidebarPath, '<li class="nav-title">' . $moduleName . '</li>' . PHP_EOL . "            " . $find);
                 }
             }
 
