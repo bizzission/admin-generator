@@ -59,7 +59,7 @@ class UpdateRequest extends ClassGenerator
         return view('brackets/admin-generator::' . $this->view, [
             'modelBaseName' => $this->modelBaseName,
             'modelDotNotation' => $this->modelDotNotation,
-            // 'modelWithNamespaceFromDefault' => $this->modelWithNamespaceFromDefault,
+            'modelWithNamespaceFromDefault' => $this->modelWithNamespaceFromDefault,
             'modelNameSpace' => $this->classNamespace,
             'modelVariableName' => $this->modelVariableName,
             'modelFullName' => $this->modelFullName,
