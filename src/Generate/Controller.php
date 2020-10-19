@@ -80,9 +80,9 @@ class Controller extends ClassGenerator
             $find = "{{-- Do not delete me :) I'm used for auto-generation menu items --}}";
             $ifExistsRegex = '|url\(\'admin\/' . $this->resource . '\'\)|';
             $sidebarPath = resource_path('views/admin/layout/sidebar.blade.php');
-            $replaceWith = "<li class=\"nav-item\"><a class=\"nav-link\" href=\"{{ url('"
+            $replaceWith = "<li class=\"c-sidebar-nav-item\"><a class=\"c-sidebar-nav-link\" href=\"{{ url('"
                 . $this->getViewNamespace('/') . "admin/" . $this->resource
-                . "') }}\"><i class=\"nav-icon " . $icon . "\"></i> {{ trans('"
+                . "') }}\"><i class=\"c-sidebar-nav-icon " . $icon . "\"></i> {{ trans('"
                 . $this->getViewNamespace() . "admin." . $this->modelLangFormat
                 . ".title') }}</a></li>";
 
@@ -92,7 +92,7 @@ class Controller extends ClassGenerator
                     . 'admin/layout/sidebar.blade.php';
                 if (!$this->alreadyExists($sidebarPath)) {
                     $this->makeDirectory($sidebarPath);
-                    $this->files->put($sidebarPath, '<li class="nav-title">' . $moduleName . '</li>' . PHP_EOL . "            " . $find);
+                    $this->files->put($sidebarPath, '<li class="c-sidebar-nav-title">' . $moduleName . '</li>' . PHP_EOL . "        " . $find);
                 }
             }
 
@@ -100,7 +100,7 @@ class Controller extends ClassGenerator
                 $sidebarPath,
                 $ifExistsRegex,
                 $find,
-                $replaceWith . PHP_EOL . "            " . $find
+                $replaceWith . PHP_EOL . "        " . $find
             )) {
                 $this->info('Updating sidebar');
             }
